@@ -24,6 +24,14 @@ public class WorldEditSelector implements Selector {
         return sel.getMaximumPosition();
     }
 
+    @Override
+    public void clear( final Player player, final boolean restart ) {
+        final Session session = (Session) player.getMetaData( "worldedit.session", null );
+
+        if ( session != null )
+            session.clearSelection();
+    }
+
     private Selection getSelection( final Player player ) {
         final Session session = (Session) player.getMetaData( "worldedit.session", null );
 

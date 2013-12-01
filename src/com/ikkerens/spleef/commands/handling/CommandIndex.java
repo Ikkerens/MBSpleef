@@ -2,14 +2,18 @@ package com.ikkerens.spleef.commands.handling;
 
 import java.util.ArrayList;
 
+import com.ikkerens.spleef.SpleefPlugin;
+import com.ikkerens.spleef.commands.AdvanceCommand;
+import com.ikkerens.spleef.commands.CancelCommand;
+import com.ikkerens.spleef.commands.CreateCommand;
 import com.ikkerens.spleef.commands.HelpCommand;
 import com.ikkerens.spleef.commands.NotFoundCommand;
+import com.ikkerens.spleef.exceptions.LogicalSpleefException;
 import com.mbserver.api.CommandSender;
 
 public class CommandIndex {
-    private static CommandIndex instance;
-
-    private final CommandChild  root;
+    private final SpleefPlugin plugin;
+    private final CommandChild root;
 
     private void registerCommands() {
         final CommandHandler help = new HelpCommand();
@@ -17,25 +21,28 @@ public class CommandIndex {
         this.register( "help", help );
         this.register( "help %", help );
 
+        final CommandHandler create = new CreateCommand();
+        this.register( "create", create );
+        this.register( "create %", create );
+
+        final CommandHandler advance = new AdvanceCommand();
+        this.register( "done", advance );
+        this.register( "advance", advance );
+        this.register( "cancel", new CancelCommand() );
+
         this.register( "% start", null );
         this.register( "% stop", null );
 
         this.register( "test", new NotFoundCommand() );
     }
 
-    public static CommandIndex getInstance() {
-        if ( instance == null )
-            instance = new CommandIndex();
-
-        return instance;
-    }
-
-    private CommandIndex() {
+    public CommandIndex( final SpleefPlugin plugin ) {
+        this.plugin = plugin;
         this.root = new CommandChild();
         this.registerCommands();
     }
 
-    public void resolve( final CommandSender player, final String[] args ) throws PlayerOnlyCommandException {
+    public void resolve( final CommandSender player, final String[] args ) throws LogicalSpleefException {
         CommandChild child = this.root;
         final ArrayList< String > paramRegister = new ArrayList< String >();
 
@@ -63,6 +70,7 @@ public class CommandIndex {
             if ( !urlPart.equals( "" ) )
                 child = child.getChildOrRegister( urlPart );
 
+        handler.injectPlugin( this.plugin );
         child.setAction( handler );
     }
 }

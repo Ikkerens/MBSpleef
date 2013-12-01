@@ -7,4 +7,6 @@ public interface Selector {
     Location getMinimumPosition( final Player player );
 
     Location getMaximumPosition( final Player player );
+
+    void clear( final Player player, final boolean restart );
 }

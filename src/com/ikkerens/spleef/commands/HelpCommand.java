@@ -1,7 +1,7 @@
 package com.ikkerens.spleef.commands;
 
 import com.ikkerens.spleef.commands.handling.CommandHandler;
-import com.ikkerens.spleef.commands.handling.PlayerOnlyCommandException;
+import com.ikkerens.spleef.exceptions.PlayerOnlyCommandException;
 import com.mbserver.api.CommandSender;
 
 public class HelpCommand extends CommandHandler {

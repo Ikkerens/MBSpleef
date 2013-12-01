@@ -18,7 +18,7 @@ public class SpleefPlugin extends MBServerPlugin implements Listener {
     @Override
     public void onEnable() {
         this.getPluginManager().registerEventHandler( this );
-        this.getPluginManager().registerCommand( "spleef", new String[] { "spl" }, new MainCommand() );
+        this.getPluginManager().registerCommand( "spleef", new String[] { "spl" }, new MainCommand( this ) );
     }
 
     public Selector getSelector() {
@@ -33,9 +33,5 @@ public class SpleefPlugin extends MBServerPlugin implements Listener {
             this.selector = new WorldEditSelector( this.getServer() );
         else
             this.selector = new BlockSelector();
-    }
-
-    public static void main( final String[] args ) {
-
     }
 }
