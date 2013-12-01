@@ -4,6 +4,8 @@ import com.mbserver.api.game.Location;
 import com.mbserver.api.game.Player;
 
 public interface Selector {
+    boolean isValid( final Player player );
+
     Location getMinimumPosition( final Player player );
 
     Location getMaximumPosition( final Player player );

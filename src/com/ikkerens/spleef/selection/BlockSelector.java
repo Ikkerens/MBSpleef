@@ -10,6 +10,12 @@ import com.mbserver.api.game.Player;
 public class BlockSelector implements Selector, Listener {
     public static final String SELECTOR_KEY = "mbspleef.selector";
 
+    @Override
+    public boolean isValid( final Player player ) {
+        final PlayerSelection sel = this.getSelection( player );
+        return ( sel.minimum != null ) && ( sel.maximum != null );
+    }
+
     @EventHandler
     public void onBlockAction( final BlockEvent event ) {
         if ( event.getPlayer().getMetaData( SELECTOR_KEY, null ) == null )

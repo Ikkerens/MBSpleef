@@ -1,15 +1,18 @@
 package com.ikkerens.spleef.commands.process;
 
+import com.ikkerens.spleef.SpleefPlugin;
 import com.ikkerens.spleef.exceptions.AlreadyInProcessException;
 import com.mbserver.api.game.Player;
 
 public abstract class Process {
     public static final String KEY = "mbspleef.process";
 
+    private final SpleefPlugin plugin;
     private final Player       player;
     private int                step;
 
-    public Process( final Player player ) throws AlreadyInProcessException {
+    public Process( final SpleefPlugin plugin, final Player player ) throws AlreadyInProcessException {
+        this.plugin = plugin;
         this.player = player;
         this.step = 0;
 
@@ -19,6 +22,10 @@ public abstract class Process {
             throw new AlreadyInProcessException( process );
 
         player.setMetaData( KEY, this );
+    }
+
+    public final SpleefPlugin getPlugin() {
+        return this.plugin;
     }
 
     public final Player getPlayer() {

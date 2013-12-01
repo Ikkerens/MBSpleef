@@ -13,6 +13,12 @@ public class WorldEditSelector implements Selector {
     }
 
     @Override
+    public boolean isValid( final Player player ) {
+        final Selection sel = this.getSelection( player );
+        return ( sel != null ) && sel.isValid();
+    }
+
+    @Override
     public Location getMinimumPosition( final Player player ) {
         final Selection sel = this.getSelection( player );
         return sel.getMinimumPosition();

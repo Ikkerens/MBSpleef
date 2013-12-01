@@ -9,7 +9,7 @@ public class CreateCommand extends CommandHandler {
 
     @Override
     public void executeCommand( final CommandSender sender, final String[] args ) throws LogicalSpleefException {
-        new CreateProcess( this.checkPlayer( sender ) ).advance();
+        new CreateProcess( this.getPlugin(), this.checkPlayer( sender ) ).advance();
     }
 
 }
