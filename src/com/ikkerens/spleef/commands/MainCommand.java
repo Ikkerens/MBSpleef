@@ -15,11 +15,6 @@ public class MainCommand implements CommandExecutor {
 
     @Override
     public void execute( final String command, final CommandSender sender, final String[] args, final String label ) {
-        if ( !sender.hasPermission( "ikkerens.spleef" ) ) {
-            sender.sendMessage( "You do not have permission to execute /" + label );
-            return;
-        }
-
         try {
             this.index.resolve( sender, args );
         } catch ( final LogicalSpleefException e ) {

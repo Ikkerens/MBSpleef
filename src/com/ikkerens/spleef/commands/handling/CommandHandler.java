@@ -24,5 +24,7 @@ public abstract class CommandHandler {
         return (Player) sender;
     }
 
+    public abstract String getPermission();
+
     public abstract void executeCommand( CommandSender sender, String[] args ) throws LogicalSpleefException;
 }

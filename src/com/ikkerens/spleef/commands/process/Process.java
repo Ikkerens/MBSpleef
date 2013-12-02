@@ -2,6 +2,7 @@ package com.ikkerens.spleef.commands.process;
 
 import com.ikkerens.spleef.SpleefPlugin;
 import com.ikkerens.spleef.exceptions.AlreadyInProcessException;
+import com.ikkerens.spleef.exceptions.RequirementsNotMetException;
 import com.mbserver.api.game.Player;
 
 public abstract class Process {
@@ -32,9 +33,9 @@ public abstract class Process {
         return this.player;
     }
 
-    public final void advance() {
-        if ( this.validate( this.step ) )
-            this.onStep( ++this.step );
+    public final void advance() throws RequirementsNotMetException {
+        this.validate( this.step );
+        this.onStep( ++this.step );
     }
 
     public final void cancel() {
@@ -48,7 +49,7 @@ public abstract class Process {
 
     public abstract String getBusyMessage();
 
-    public abstract boolean validate( int step );
+    public abstract void validate( int step ) throws RequirementsNotMetException;
 
     public abstract void onStep( int step );
 }

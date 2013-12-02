@@ -1,7 +1,7 @@
 package com.ikkerens.spleef;
 
 import com.ikkerens.spleef.commands.MainCommand;
-import com.ikkerens.spleef.selection.BlockSelector;
+import com.ikkerens.spleef.selection.BlockEventSelector;
 import com.ikkerens.spleef.selection.Selector;
 import com.ikkerens.spleef.selection.WorldEditSelector;
 import com.ikkerens.worldedit.WorldEditPlugin;
@@ -32,6 +32,6 @@ public class SpleefPlugin extends MBServerPlugin implements Listener {
         if ( we instanceof WorldEditPlugin )
             this.selector = new WorldEditSelector( this.getServer() );
         else
-            this.selector = new BlockSelector();
+            this.selector = new BlockEventSelector();
     }
 }

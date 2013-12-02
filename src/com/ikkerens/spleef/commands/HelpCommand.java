@@ -1,10 +1,16 @@
 package com.ikkerens.spleef.commands;
 
+import com.ikkerens.spleef.Permissions;
 import com.ikkerens.spleef.commands.handling.CommandHandler;
 import com.ikkerens.spleef.exceptions.PlayerOnlyCommandException;
 import com.mbserver.api.CommandSender;
 
 public class HelpCommand extends CommandHandler {
+
+    @Override
+    public String getPermission() {
+        return Permissions.PLAY;
+    }
 
     @Override
     public void executeCommand( final CommandSender sender, final String[] args ) throws PlayerOnlyCommandException {

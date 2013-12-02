@@ -7,7 +7,7 @@ import com.mbserver.api.events.Listener;
 import com.mbserver.api.game.Location;
 import com.mbserver.api.game.Player;
 
-public class BlockSelector implements Selector, Listener {
+public class BlockEventSelector implements Selector, Listener {
     public static final String SELECTOR_KEY = "mbspleef.selector";
 
     @Override

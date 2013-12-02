@@ -42,7 +42,7 @@ public class CommandIndex {
         this.registerCommands();
     }
 
-    public void resolve( final CommandSender player, final String[] args ) throws LogicalSpleefException {
+    public void resolve( final CommandSender sender, final String[] args ) throws LogicalSpleefException {
         CommandChild child = this.root;
         final ArrayList< String > paramRegister = new ArrayList< String >();
 
@@ -51,7 +51,7 @@ public class CommandIndex {
             if ( !urlPart.equals( "" ) ) {
                 child = child.getChild( paramRegister, urlPart );
                 if ( child == null ) {
-                    new NotFoundCommand().executeCommand( player, args );
+                    new NotFoundCommand().executeCommand( sender, args );
                     return;
                 }
             }
@@ -59,7 +59,9 @@ public class CommandIndex {
         final String[] params = new String[ paramRegister.size() ];
         paramRegister.toArray( params );
 
-        child.getHandler().executeCommand( player, params );
+        final CommandHandler handler = child.getHandler();
+        if ( !sender.hasPermission( handler.getPermission() ) )
+            handler.executeCommand( sender, params );
     }
 
     private void register( final String url, final CommandHandler handler ) {
