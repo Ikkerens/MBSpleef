@@ -15,7 +15,12 @@ public class CreateCommand extends CommandHandler {
 
     @Override
     public void executeCommand( final CommandSender sender, final String[] args ) throws LogicalSpleefException {
-        new CreateProcess( this.getPlugin(), this.checkPlayer( sender ) ).advance();
+        if ( args.length < 1 ) {
+            sender.sendMessage( "Usage: /spl create <name>" );
+            return;
+        }
+
+        new CreateProcess( this.getPlugin(), this.checkPlayer( sender ), args[ 0 ] ).advance();
     }
 
 }

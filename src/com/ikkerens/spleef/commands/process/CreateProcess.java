@@ -3,16 +3,19 @@ package com.ikkerens.spleef.commands.process;
 import com.ikkerens.spleef.SpleefPlugin;
 import com.ikkerens.spleef.exceptions.AlreadyInProcessException;
 import com.ikkerens.spleef.exceptions.RequirementsNotMetException;
+import com.ikkerens.spleef.selection.Selection;
 import com.ikkerens.spleef.selection.Selector;
 import com.mbserver.api.game.Location;
 import com.mbserver.api.game.Player;
 
 public class CreateProcess extends Process {
-    private Location fullPos1, fullPos2;
-    private Location breakPos1, breakPos2;
+    private final String name;
+    private Selection    full, breakable;
+    private Location     wait;
 
-    public CreateProcess( final SpleefPlugin plugin, final Player player ) throws AlreadyInProcessException {
+    public CreateProcess( final SpleefPlugin plugin, final Player player, final String name ) throws AlreadyInProcessException {
         super( plugin, player );
+        this.name = name;
     }
 
     @Override
@@ -23,28 +26,34 @@ public class CreateProcess extends Process {
     @Override
     public void validate( final int step ) throws RequirementsNotMetException {
         final Player player = this.getPlayer();
-        final Selector sel = this.getPlugin().getSelector();
+        final Selector selector = this.getPlugin().getSelector();
 
         switch ( step ) {
             case 0:
                 break;
             case 1:
-                if ( !sel.isValid( player ) )
+                if ( selector.getSelection( player ) == null )
                     throw new RequirementsNotMetException( "That is not a valid selection!" );
 
                 break;
             case 2: {
-                if ( !sel.isValid( player ) )
+                final Selection sel = selector.getSelection( player );
+                if ( sel == null )
                     throw new RequirementsNotMetException( "That is not a valid selection!" );
 
-                final Location p1 = sel.getMinimumPosition( player );
-                final Location p2 = sel.getMaximumPosition( player );
-
-                if ( p1.getBlockY() != p2.getBlockY() )
+                if ( sel.getMinimumLocation().getBlockY() != sel.getMaximumLocation().getBlockY() )
                     throw new RequirementsNotMetException( "The selected area is more than 1 block high!" );
 
-                if ( ( p1.getX() < this.fullPos1.getX() ) || ( p2.getX() > this.fullPos2.getX() ) || ( p1.getZ() < this.fullPos1.getZ() ) || ( p2.getZ() > this.fullPos2.getZ() ) || ( p1.getY() < this.fullPos1.getY() ) || ( p1.getY() > this.fullPos2.getY() ) )
+                if ( !this.full.contains( sel.getMinimumLocation() ) || !this.full.contains( sel.getMaximumLocation() ) )
                     throw new RequirementsNotMetException( "The selected area is not within the whole arena selection!" );
+
+                break;
+            }
+            case 3: {
+                final Location playerLoc = player.getLocation();
+
+                if ( !this.full.contains( playerLoc ) )
+                    throw new RequirementsNotMetException( "Your position is not within the whole arena selection!" );
 
                 break;
             }
@@ -67,21 +76,31 @@ public class CreateProcess extends Process {
                 break;
             }
             case 2: {
-                this.fullPos1 = sel.getMinimumPosition( player );
-                this.fullPos2 = sel.getMaximumPosition( player );
+                this.full = sel.getSelection( player );
                 sel.clear( player, true );
                 player.sendMessage( "Now select the breakable area. This area can only be 1 block high." );
                 player.sendMessage( "Once you are ready enter command: /spl done" );
                 break;
             }
             case 3: {
-                this.breakPos1 = sel.getMinimumPosition( player );
-                this.breakPos2 = sel.getMaximumPosition( player );
+                this.breakable = sel.getSelection( player );
                 sel.clear( player, false );
                 player.sendMessage( "Please stand at the location you want to use as a waiting area." );
+                player.sendMessage( "Once you are ready enter command: /spl done" );
+                break;
+            }
+            case 4: {
+                this.wait = player.getLocation();
+                this.finish();
+                player.sendMessage( "Your arena has been created!" );
             }
             default:
                 throw new UnsupportedOperationException();
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
     }
 }

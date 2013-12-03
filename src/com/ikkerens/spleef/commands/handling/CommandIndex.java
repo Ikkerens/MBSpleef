@@ -30,8 +30,8 @@ public class CommandIndex {
         this.register( "advance", advance );
         this.register( "cancel", new CancelCommand() );
 
-        this.register( "% start", null );
-        this.register( "% stop", null );
+        this.register( "% start", new HelpCommand() );
+        this.register( "% stop", new HelpCommand() );
 
         this.register( "test", new NotFoundCommand() );
     }
